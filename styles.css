@@ -6,6 +6,9 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 nav {
@@ -40,17 +43,18 @@ main {
   max-width: 1200px;
   margin: auto;
   text-align: center; /* Center text in main */
-  margin-bottom: 60px; /* Add margin to ensure space for footer */
 }
 
+/* Footer Styles */
 .footer {
   background-color: #1e1e1e;
   color: #e0e0e0;
   text-align: center;
-  padding: 10px;
-  bottom: 0;
-  width: 95%;
-  z-index: 1000; /* Ensure footer is on top */
+  padding-top: 10px;
+  padding-bottom: 10px;
+  position: relative; /* Change position from fixed to relative */
+  width: 100vw;
+  margin-top: auto;
 }
 
 /* Card Styles */
