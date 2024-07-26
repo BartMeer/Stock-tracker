@@ -48,9 +48,8 @@ main {
   color: #e0e0e0;
   text-align: center;
   padding: 10px;
-  position: fixed;
   bottom: 0;
-  width: 100%;
+  width: 95%;
   z-index: 1000; /* Ensure footer is on top */
 }
 
