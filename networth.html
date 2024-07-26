@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Net Worth</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Link to external CSS file -->
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">ETF Information</a></li>
+        <li><a href="networth.html" class="active">Net Worth</a></li>
+      </ul>
+    </nav>
+    <main>
+      <h1>Net Worth Overview</h1>
+      <div class="card combined-card">
+        <h2>Combined Net Worth</h2>
+        <p id="combinedNetWorth">Net Worth: €0</p>
+        <p id="combinedAllocationBolero">
+          Bolero Allocation: €0 (<span id="combinedAllocationBoleroPercent"
+            >0%</span
+          >)
+        </p>
+        <p id="combinedAllocationCash">
+          Cash Allocation: €0 (<span id="combinedAllocationCashPercent">0%</span
+          >)
+        </p>
+        <p id="combinedAllocationPension">
+          Pension savings Allocation: €0 (<span
+            id="combinedAllocationPensionPercent"
+            >0%</span
+          >)
+        </p>
+        <p id="combinedAllocationKBC">
+          KBC Stocks Allocation: €0 (<span id="combinedAllocationKBCPercent"
+            >0%</span
+          >)
+        </p>
+      </div>
+
+      <div class="card-container">
+        <!-- Individual Cards -->
+        <div class="card">
+          <h2>Bart</h2>
+          <p id="netWorth1">Net Worth: €0</p>
+          <p id="allocationBolero1">
+            Bolero Allocation: €0 (<span id="">0%</span>)
+          </p>
+          <p id="allocationCash1">
+            Cash Allocation: €0 (<span id="allocationCash1Percent">0%</span>)
+          </p>
+          <p id="allocationPension1">
+            Pension Savings Allocation: €0 (<span id="allocationPension1Percent"
+              >0%</span
+            >)
+          </p>
+        </div>
+
+        <div class="card">
+          <h2>Jolien</h2>
+          <p id="netWorth2">Net Worth: €0</p>
+          <p id="allocationBolero2">
+            Bolero Allocation: €0 (<span id="allocationBolero2Percent">0%</span
+            >)
+          </p>
+          <p id="allocationCash2">
+            Cash Allocation: €0 (<span id="allocationCash2Percent">0%</span>)
+          </p>
+          <p id="allocationKBC">
+            KBC Stocks Allocation: €0 (<span id="allocationKBCPercent">0%</span
+            >)
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <div class="footer">
+      <p>Last Updated: <span id="lastUpdated">July 26, 2024</span></p>
+    </div>
+
+    <!-- Include the xlsx library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="networth.js"></script>
+    <!-- Link to external JavaScript file -->
+  </body>
+</html>

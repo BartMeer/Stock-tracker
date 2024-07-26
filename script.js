@@ -8,14 +8,7 @@ function loadData() {
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
       displayData(jsonData);
-
-      // Read net worth from cell G2
-      const netWorthCell = worksheet["G2"];
-      const netWorth = netWorthCell ? netWorthCell.v : 0;
-
-      document.getElementById(
-        "netWorth"
-      ).textContent = `Net Worth: €${netWorth.toFixed(2)}`;
+      calculateTotals(jsonData);
     })
     .catch((error) =>
       console.error("Error fetching or parsing the .xlsx file:", error)
@@ -23,52 +16,65 @@ function loadData() {
 }
 
 function displayData(data) {
-  const container = document.getElementById("etfCards");
-  container.innerHTML = ""; // Clear previous data
-
-  let totalInvested = 0;
-  let totalCurrentValue = 0;
+  const tbody = document.querySelector(".card-container");
+  tbody.innerHTML = ""; // Clear previous data
 
   data.forEach((etf) => {
     const invested = parseFloat(etf["Money Invested"]) || 0;
     const shares = parseFloat(etf.Shares) || 0;
     const currentPrice = parseFloat(etf["Current Price"]) || 0;
-    const averageBuyPrice = parseFloat(etf["Average Buy Price"]) || 0;
     const currentValue = shares * currentPrice;
-    const gain = currentValue - invested;
+    const profit = currentValue - invested;
+    const profitPercent = invested === 0 ? 0 : (profit / invested) * 100;
+
+    const row = document.createElement("div");
+    row.className = "card";
+    row.innerHTML = `
+            <h2>${etf.Name}</h2>
+            <p>Shares: ${shares}</p>
+            <p>Money Invested: €${invested.toFixed(2)}</p>
+            <p>Average Buy Price: €${etf["Average Buy Price"].toFixed(2)}</p>
+            <p>Current Price: €${currentPrice.toFixed(2)}</p>
+            <p>Total Current Value: €${currentValue.toFixed(2)}</p>
+            <p>Total Profit: €${profit.toFixed(2)} (${profitPercent.toFixed(
+      2
+    )}%)</p>`;
+    tbody.appendChild(row);
+  });
+}
+
+function calculateTotals(data) {
+  let totalInvested = 0;
+  let totalCurrentValue = 0;
+  let totalProfit = 0;
+
+  data.forEach((etf) => {
+    const invested = parseFloat(etf["Money Invested"]) || 0;
+    const shares = parseFloat(etf.Shares) || 0;
+    const currentPrice = parseFloat(etf["Current Price"]) || 0;
+    const currentValue = shares * currentPrice;
+    const profit = currentValue - invested;
 
     totalInvested += invested;
     totalCurrentValue += currentValue;
-
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-            <h2>${etf.Name}</h2>
-            <p><strong>Shares:</strong> ${shares}</p>
-            <p><strong>Money Invested:</strong> €${invested.toFixed(2)}</p>
-            <p><strong>Average Buy Price:</strong> €${averageBuyPrice.toFixed(
-              2
-            )}</p>
-            <p><strong>Current Price:</strong> €${currentPrice.toFixed(2)}</p>
-            <p><strong>Total Current Value:</strong> €${currentValue.toFixed(
-              2
-            )}</p>
-            <p><strong>Gain:</strong> €${gain.toFixed(2)}</p>
-        `;
-    container.appendChild(card);
+    totalProfit += profit;
   });
 
-  const totalProfit = totalCurrentValue - totalInvested;
+  const profitPercent =
+    totalInvested === 0 ? 0 : (totalProfit / totalInvested) * 100;
 
-  document.getElementById(
-    "totalProfit"
-  ).textContent = `Total Profit: €${totalProfit.toFixed(2)}`;
   document.getElementById(
     "totalInvested"
   ).textContent = `Total Invested Money: €${totalInvested.toFixed(2)}`;
   document.getElementById(
     "totalCurrentValue"
   ).textContent = `Total Current Value: €${totalCurrentValue.toFixed(2)}`;
+  document.getElementById(
+    "totalProfit"
+  ).textContent = `Total Profit: €${totalProfit.toFixed(
+    2
+  )} (${profitPercent.toFixed(2)}%)`;
 }
 
+// Automatically load data when the page loads
 window.onload = loadData;

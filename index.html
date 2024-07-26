@@ -8,20 +8,32 @@
     <!-- Link to external CSS file -->
   </head>
   <body>
-    <h1>ETF Information</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html" class="active">ETF Information</a></li>
+        <li><a href="networth.html">Net Worth</a></li>
+      </ul>
+    </nav>
+    <main>
+      <h1>ETF Information</h1>
 
-    <div class="summary">
-      <p id="totalProfit">Total Profit: €0</p>
-      <!-- New Paragraph for Total Profit -->
-      <p id="totalInvested">Total Invested Money: €0</p>
-      <p id="totalCurrentValue">Total Current Value: €0</p>
-      <!-- New Paragraph for Total Current Value -->
-      <p id="netWorth">Net Worth: €0</p>
-      <!-- New Paragraph for Net Worth -->
+      <!-- Total Values Card -->
+      <div class="card total-values-card">
+        <h2>Total Values</h2>
+        <p id="totalInvested">Total Invested Money: €0</p>
+        <p id="totalCurrentValue">Total Current Value: €0</p>
+        <p id="totalProfit">Total Profit: €0</p>
+      </div>
+
+      <!-- ETF Data Card -->
+      <div class="card-container">
+        <!-- Individual ETF Cards will be inserted here by JavaScript -->
+      </div>
+    </main>
+
+    <div class="footer">
+      <p>Last Updated: <span id="lastUpdated">July 26, 2024</span></p>
     </div>
-
-    <div id="etfCards" class="card-container"></div>
-    <!-- Container for ETF cards -->
 
     <!-- Include the xlsx library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
