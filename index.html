@@ -16,23 +16,37 @@
     </nav>
     <main>
       <h1>ETF Information</h1>
+      <!-- Button to refresh data -->
 
-      <!-- Total Values Card -->
       <div class="card total-values-card">
         <h2>Total Values</h2>
         <p id="totalInvested">Total Invested Money: €0</p>
         <p id="totalCurrentValue">Total Current Value: €0</p>
-        <p id="totalProfit">Total Profit: €0</p>
+        <p id="totalProfit">
+          Total Profit: €0 (<span id="totalProfitPercent">0%</span>)
+        </p>
       </div>
 
-      <!-- ETF Data Card -->
       <div class="card-container">
-        <!-- Individual ETF Cards will be inserted here by JavaScript -->
+        <!-- Individual Cards -->
+        <!-- Example Card -->
+        <div class="card">
+          <h2>ETF Name</h2>
+          <p id="shares">Shares: 0</p>
+          <p id="moneyInvested">Money Invested: €0</p>
+          <p id="averageBuyPrice">Average Buy Price: €0</p>
+          <p id="currentPrice">Current Price: €0</p>
+          <p id="totalCurrentValue">Total Current Value: €0</p>
+          <p id="profit">Profit: €0 (<span id="profitPercent">0%</span>)</p>
+        </div>
       </div>
     </main>
 
     <div class="footer">
-      <p>Last Updated: <span id="lastUpdated">July 26, 2024</span></p>
+      <p>
+        Last Updated: <span id="lastUpdated">July 26, 2024</span>
+        <button id="refreshData">Refresh Data</button>
+      </p>
     </div>
 
     <!-- Include the xlsx library -->

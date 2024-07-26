@@ -9,6 +9,7 @@ function loadData() {
 
       displayData(jsonData);
       calculateTotals(jsonData);
+      console.log("Data refreshed");
     })
     .catch((error) =>
       console.error("Error fetching or parsing the .xlsx file:", error)
@@ -16,8 +17,8 @@ function loadData() {
 }
 
 function displayData(data) {
-  const tbody = document.querySelector(".card-container");
-  tbody.innerHTML = ""; // Clear previous data
+  const container = document.querySelector(".card-container");
+  container.innerHTML = ""; // Clear previous data
 
   data.forEach((etf) => {
     const invested = parseFloat(etf["Money Invested"]) || 0;
@@ -27,19 +28,21 @@ function displayData(data) {
     const profit = currentValue - invested;
     const profitPercent = invested === 0 ? 0 : (profit / invested) * 100;
 
-    const row = document.createElement("div");
-    row.className = "card";
-    row.innerHTML = `
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
             <h2>${etf.Name}</h2>
             <p>Shares: ${shares}</p>
             <p>Money Invested: €${invested.toFixed(2)}</p>
-            <p>Average Buy Price: €${etf["Average Buy Price"].toFixed(2)}</p>
+            <p>Average Buy Price: €${parseFloat(
+              etf["Average Buy Price"]
+            ).toFixed(2)}</p>
             <p>Current Price: €${currentPrice.toFixed(2)}</p>
             <p>Total Current Value: €${currentValue.toFixed(2)}</p>
             <p>Total Profit: €${profit.toFixed(2)} (${profitPercent.toFixed(
       2
     )}%)</p>`;
-    tbody.appendChild(row);
+    container.appendChild(card);
   });
 }
 
@@ -78,3 +81,6 @@ function calculateTotals(data) {
 
 // Automatically load data when the page loads
 window.onload = loadData;
+
+// Add event listener to the refresh button
+document.getElementById("refreshData").addEventListener("click", loadData);
