@@ -1,3 +1,12 @@
+function convertExcelDate(excelSerialDate) {
+  const excelEpoch = new Date(Date.UTC(1900, 0, 1));
+  const daysOffset = excelSerialDate - 2; // Excel dates start on 1/1/1900 with a leap year bug (Excel treats 1900 as a leap year)
+  const convertedDate = new Date(
+    excelEpoch.setUTCDate(excelEpoch.getUTCDate() + daysOffset)
+  );
+  return convertedDate.toISOString().split("T")[0]; // Format the date as YYYY-MM-DD
+}
+
 function loadData() {
   fetch("data.xlsx")
     .then((response) => response.arrayBuffer())
@@ -6,6 +15,12 @@ function loadData() {
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+      const toDay = worksheet["U3"] ? worksheet["U3"].v : 0;
+
+      document.getElementById("lastUpdated").textContent = `${convertExcelDate(
+        toDay
+      )}`;
 
       displayData(jsonData);
       calculateTotals(jsonData);
