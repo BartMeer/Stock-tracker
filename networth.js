@@ -35,13 +35,13 @@ function loadNetWorthData() {
       const totalKBC = row3.kbc;
 
       // Update HTML with data for Bart
-      updateElement('netWorth1', 'Net Worth', row2.netWorth, row2.netWorth);
+      updateElement('netWorth1', 'Net Worth', row2.netWorth, totalNetWorth, true);
       updateElement('allocationBolero1', 'Bolero', row2.bolero, row2.netWorth, true);
       updateElement('allocationCash1', 'Cash', row2.cash, row2.netWorth, true);
       updateElement('allocationPension1', 'Pension Savings', row2.pension, row2.netWorth, true);
 
       // Update HTML with data for Jolien
-      updateElement('netWorth2', 'Net Worth', row3.netWorth, row3.netWorth, true);
+      updateElement('netWorth2', 'Net Worth', row3.netWorth, totalNetWorth, true);
       updateElement('allocationBolero2', 'Bolero', row3.bolero, row3.netWorth, true);
       updateElement('allocationCash2', 'Cash', row3.cash, row3.netWorth, true);
       updateElement('allocationKBC', 'KBC Stocks', row3.kbc, row3.netWorth, true);
