@@ -110,7 +110,7 @@ main {
 
 /* Combined Card Styles */
 .combined-card {
-  width: 640px; /* Width for combined card, twice the width of individual cards */
+  width: 660px; /* Width for combined card, twice the width of individual cards */
   margin: auto;
 }
 
