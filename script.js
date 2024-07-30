@@ -1,102 +1,94 @@
-function displayDateTime(excelSerial) {
-  const date = new Date(Math.round((excelSerial - 25569) * 86400 * 1000));
+async function loadData() {
+  try {
+    const response = await fetch('data.xlsx');
+    const data = await response.arrayBuffer();
+    const workbook = XLSX.read(data, { type: 'array' });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const jsonData = XLSX.utils.sheet_to_json(sheet);
 
-  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+    const today = sheet['U3']?.v || 0;
 
-  const dateString = date.toDateString();
-  const timeString = date.toTimeString().split(" ")[0];
-  const formattedDateTime = `${dateString} ${timeString}`;
-
-  document.getElementById("lastUpdated").innerText = formattedDateTime;
-}
-
-function loadData() {
-  fetch("data.xlsx")
-    .then((response) => response.arrayBuffer())
-    .then((data) => {
-      const workbook = XLSX.read(data, { type: "array" });
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-      const toDay = worksheet["U3"] ? worksheet["U3"].v : 0;
-
-      displayDateTime(toDay);
-
-      displayData(jsonData);
-      calculateTotals(jsonData);
-      console.log("Data refreshed");
-    })
-    .catch((error) =>
-      console.error("Error fetching or parsing the .xlsx file:", error)
-    );
+    displayDateTime(today);
+    displayData(jsonData);
+    calculateTotals(jsonData);
+    console.log('Data refreshed');
+  } catch (error) {
+    console.error('Error fetching or parsing the .xlsx file:', error);
+  }
 }
 
 function displayData(data) {
-  const container = document.querySelector(".card-container");
-  container.innerHTML = ""; // Clear previous data
+  const container = document.querySelector('.card-container');
+  container.innerHTML = ''; // Clear previous data
 
   data.forEach((etf) => {
-    const invested = parseFloat(etf["Money Invested"]) || 0;
-    const shares = parseFloat(etf.Shares) || 0;
-    const currentPrice = parseFloat(etf["Current Price"]) || 0;
-    const currentValue = shares * currentPrice;
-    const profit = currentValue - invested;
-    const profitPercent = invested === 0 ? 0 : (profit / invested) * 100;
+    const {
+      Name,
+      Shares,
+      'Money Invested': invested,
+      'Current Price': currentPrice,
+      'Average Buy Price': avgBuyPrice,
+    } = etf;
 
-    const card = document.createElement("div");
-    card.className = "card";
+    const shares = parseFloat(Shares) || 0;
+    const investedAmount = parseFloat(invested) || 0;
+    const price = parseFloat(currentPrice) || 0;
+    const avgPrice = parseFloat(avgBuyPrice) || 0;
+
+    const currentValue = shares * price;
+    const profit = currentValue - investedAmount;
+    const profitPercent = investedAmount === 0 ? 0 : (profit / investedAmount) * 100;
+
+    const card = document.createElement('div');
+    card.className = 'card';
     card.innerHTML = `
-            <h2>${etf.Name}</h2>
-            <p>Shares: ${shares}</p>
-            <p>Money Invested: €${invested.toFixed(2)}</p>
-            <p>Average Buy Price: €${parseFloat(
-              etf["Average Buy Price"]
-            ).toFixed(2)}</p>
-            <p>Current Price: €${currentPrice.toFixed(2)}</p>
-            <p>Total Current Value: €${currentValue.toFixed(2)}</p>
-            <p>Total Profit: €${profit.toFixed(2)} (${profitPercent.toFixed(
-      2
+      <h2>${Name}</h2>
+      <p>Shares: ${numberFormatter.format(shares)}</p>
+      <p>Money Invested: ${currencyFormatter.format(investedAmount)}</p>
+      <p>Average Buy Price: ${currencyFormatter.format(avgPrice)}</p>
+      <p>Current Price: ${currencyFormatter.format(price)}</p>
+      <p>Total Current Value: ${currencyFormatter.format(currentValue)}</p>
+      <p>Total Profit: ${currencyFormatter.format(profit)} (${numberFormatter.format(
+      profitPercent.toFixed(2)
     )}%)</p>`;
+
     container.appendChild(card);
   });
 }
 
 function calculateTotals(data) {
-  let totalInvested = 0;
-  let totalCurrentValue = 0;
-  let totalProfit = 0;
+  const totals = data.reduce(
+    (acc, etf) => {
+      const shares = parseFloat(etf.Shares) || 0;
+      const invested = parseFloat(etf['Money Invested']) || 0;
+      const currentPrice = parseFloat(etf['Current Price']) || 0;
 
-  data.forEach((etf) => {
-    const invested = parseFloat(etf["Money Invested"]) || 0;
-    const shares = parseFloat(etf.Shares) || 0;
-    const currentPrice = parseFloat(etf["Current Price"]) || 0;
-    const currentValue = shares * currentPrice;
-    const profit = currentValue - invested;
+      const currentValue = shares * currentPrice;
+      const profit = currentValue - invested;
 
-    totalInvested += invested;
-    totalCurrentValue += currentValue;
-    totalProfit += profit;
-  });
+      acc.totalInvested += invested;
+      acc.totalCurrentValue += currentValue;
+      acc.totalProfit += profit;
 
-  const profitPercent =
-    totalInvested === 0 ? 0 : (totalProfit / totalInvested) * 100;
+      return acc;
+    },
+    { totalInvested: 0, totalCurrentValue: 0, totalProfit: 0 }
+  );
 
-  document.getElementById(
-    "totalInvested"
-  ).textContent = `Total Invested Money: €${totalInvested.toFixed(2)}`;
-  document.getElementById(
-    "totalCurrentValue"
-  ).textContent = `Total Current Value: €${totalCurrentValue.toFixed(2)}`;
-  document.getElementById(
-    "totalProfit"
-  ).textContent = `Total Profit: €${totalProfit.toFixed(
-    2
-  )} (${profitPercent.toFixed(2)}%)`;
+  updateElement(
+    'totalInvested',
+    'Total Invested Money',
+    totals.totalInvested,
+    totals.totalInvested
+  );
+  updateElement(
+    'totalCurrentValue',
+    'Total Current Value',
+    totals.totalCurrentValue,
+    totals.totalInvested
+  );
+  updateElement('totalProfit', 'Total Profit', totals.totalProfit, totals.totalInvested, true);
 }
 
 // Automatically load data when the page loads
 window.onload = loadData;
-
-// Add event listener to the refresh button
-document.getElementById("refreshData").addEventListener("click", loadData);
