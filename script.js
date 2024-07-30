@@ -75,18 +75,8 @@ function calculateTotals(data) {
     { totalInvested: 0, totalCurrentValue: 0, totalProfit: 0 }
   );
 
-  updateElement(
-    'totalInvested',
-    'Total Invested Money',
-    totals.totalInvested,
-    totals.totalInvested
-  );
-  updateElement(
-    'totalCurrentValue',
-    'Total Current Value',
-    totals.totalCurrentValue,
-    totals.totalInvested
-  );
+  updateElement('totalInvested', 'Total Invested Money', totals.totalInvested);
+  updateElement('totalCurrentValue', 'Total Current Value', totals.totalCurrentValue);
   updateElement('totalProfit', 'Total Profit', totals.totalProfit, totals.totalInvested, true);
 }
 

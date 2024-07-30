@@ -1,7 +1,3 @@
-function getCellValue(cell) {
-  return cell ? parseFloat(cell.v) || 0 : 0;
-}
-
 function loadNetWorthData() {
   fetch('data.xlsx')
     .then((response) => response.arrayBuffer())
@@ -47,7 +43,7 @@ function loadNetWorthData() {
       updateElement('allocationKBC', 'KBC Stocks', row3.kbc, row3.netWorth, true);
 
       // Update HTML with combined data
-      updateElement('combinedNetWorth', 'Net Worth', totalNetWorth, totalNetWorth);
+      updateElement('combinedNetWorth', 'Net Worth', totalNetWorth);
       updateElement('combinedAllocationBolero', 'Bolero', totalBolero, totalNetWorth, true);
       updateElement('combinedAllocationCash', 'Cash', totalCash, totalNetWorth, true);
       updateElement(

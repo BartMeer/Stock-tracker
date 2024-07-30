@@ -9,6 +9,10 @@ function formatPercentage(part, total) {
   return total === 0 ? '0.00%' : numberFormatter.format((part / total) * 100) + '%';
 }
 
+function getCellValue(cell) {
+  return cell ? parseFloat(cell.v) || 0 : 0;
+}
+
 function updateElement(id, label, value, total = null, showPercentage = false) {
   const element = document.getElementById(id);
 
